@@ -2,9 +2,13 @@ package com.dailycode.dreamshops.service.product;
 
 import java.util.List;
 
+import com.dailycode.dreamshops.exceptions.ProductNotFoundException;
 import com.dailycode.dreamshops.model.Product;
+import com.dailycode.dreamshops.repository.ProductRepository;
 
 public class ProductService implements IProductService {
+    private ProductRepository productRepository;
+
 
     @Override
     public Product addProduct(Product product) {
@@ -14,14 +18,15 @@ public class ProductService implements IProductService {
 
     @Override
     public Product getProductById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductById'");
+        return productRepository.findById(id)
+        .orElseThrow(() -> new ProductNotFoundException("Product not found"));
     }
 
     @Override
     public void deleteProductById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteProductById'");
+        productRepository.findById(id)
+        .ifPresentOrElse(productRepository::delete, 
+        () -> {throw new ProductNotFoundException("Product not found");});
     }
 
     @Override
