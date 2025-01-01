@@ -1,9 +1,11 @@
 package com.dailycode.dreamshops.service.category;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.dailycode.dreamshops.exceptions.AlreadyExistException;
 import com.dailycode.dreamshops.exceptions.ResourceNotFoundException;
 import com.dailycode.dreamshops.model.Category;
 import com.dailycode.dreamshops.repository.CategoryRespository;
@@ -33,14 +35,17 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category addCategory(Category category) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addCategory'");
+       return Optional.of(category).filter(c -> !categoryRespository.existsByName(c.getName()))
+       .map(categoryRespository::save)
+       .orElseThrow(() -> new AlreadyExistException(category.getName()+" already exist"));
     }
 
     @Override
-    public Category updateCategory(Category category) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCategory'");
+    public Category updateCategory(Category category, Long id) {
+        return Optional.ofNullable(getCategoryById(id)).map(oldCategory -> {
+            oldCategory.setName(category.getName());
+            return categoryRespository.save(oldCategory);
+        }).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     @Override
