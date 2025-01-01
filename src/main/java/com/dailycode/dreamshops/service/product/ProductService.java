@@ -2,18 +2,24 @@ package com.dailycode.dreamshops.service.product;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.dailycode.dreamshops.exceptions.ProductNotFoundException;
 import com.dailycode.dreamshops.model.Product;
 import com.dailycode.dreamshops.repository.ProductRepository;
+import com.dailycode.dreamshops.request.AddProductRequest;
 
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class ProductService implements IProductService {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
 
     @Override
-    public Product addProduct(Product product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addProduct'");
+    public Product addProduct(AddProductRequest request) {
+       return null;
     }
 
     @Override
@@ -57,20 +63,17 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getProductsByName(String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductsByName'");
+        return productRepository.findByName(name);
     }
 
     @Override
     public List<Product> getProductsByBrandAndName(String brand, String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductsByBrandAndName'");
+        return productRepository.findByBrandAndName(brand, name);
     }
 
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'countProductsByBrandAndName'");
+        return productRepository.countByBrandAndName(brand, name);
     }
 
 }
